@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario Institucional | Universidad NovaTech del Valle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #fcf8f2;
+            --green-ghibli: #2c5339;
+            --terracotta: #9b3e22;
+            --wood-dark: #1b2822;
+            --border-soft: #d3cdbf;
+            --accent-gold: #ffe599;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg-main);
+            color: var(--wood-dark);
+        }
+        /* Header y Navegación */
+        header {
+            background: var(--wood-dark);
+            color: white;
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .contenedor-header {
+            max-width: 1250px; margin: auto; display: flex; align-items: center; justify-content: space-between; height: 75px; padding: 0 20px;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icono {
+            width: 40px; height: 40px; background: var(--green-ghibli); color: white;
+            display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 20px;
+        }
+        .logo-texto h1 { font-size: 20px; color: white; line-height: 1; }
+        .logo-texto span { font-size: 11px; color: #a3b8af; font-weight: 600; }
+        
+        nav { display: flex; align-items: center; gap: 15px; }
+        nav a {
+            color: white; text-decoration: none; font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 8px; transition: 0.3s;
+        }
+        nav a:hover, nav a.activo { color: var(--accent-gold); background: rgba(255,255,255,0.05); }
+        .login-btn { background: var(--green-ghibli) !important; color: white !important; }
+        .login-btn:hover { background: var(--terracotta) !important; }
+
+        #btnMenu { display: none; border: none; background: none; font-size: 24px; color: white; cursor: pointer; }
+
+        /* Contenido Principal / Inventario */
+        main { max-width: 1250px; margin: 100px auto 40px auto; padding: 0 20px; }
+        
+        .titulo-seccion {
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-soft);
+            padding-bottom: 15px;
+        }
+        .titulo-seccion h2 { font-size: 26px; color: var(--wood-dark); margin-bottom: 5px; }
+        .titulo-seccion p { font-size: 14px; color: #555; font-weight: 600; }
+
+        .tabla-contenedor {
+            background: white; border-radius: 12px; border: 1px solid var(--border-soft);
+            overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+        th { background: var(--green-ghibli); color: white; padding: 14px 12px; font-weight: 700; }
+        td { padding: 12px; border-bottom: 1px solid var(--border-soft); color: #333; }
+        tr:hover { background: #f7f3ec; }
+
+        /* Estados personalizados */
+        .badge {
+            padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block;
+        }
+        .badge.bueno { background: #e8f0e9; color: #2c5339; }
+        .badge.regular { background: #fdf5e6; color: #b8860b; }
+        .badge.reparacion { background: #faebd7; color: #9b3e22; }
+
+        /* Responsive */
+        @media(max-width: 800px) {
+            #btnMenu { display: block; }
+            nav {
+                position: absolute; top: 75px; left: 0; width: 100%; background: var(--wood-dark);
+                flex-direction: column; align-items: center; padding: 20px 0; display: none;
+                border-bottom: 2px solid var(--green-ghibli); box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+            }
+            nav.mostrar { display: flex !important; }
+            nav a { width: 80%; text-align: center; margin: 4px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="contenedor-header">
+            <div class="logo">
+                <div class="logo-icono"><i class="fa-solid fa-tree"></i></div>
+                <div class="logo-texto">
+                    <h1>UNOVA</h1>
+                    <span>Universidad NovaTech</span>
+                </div>
+            </div>
+            <button id="btnMenu" type="button" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+            <nav id="menu">
+                <a href="index.html">Inicio</a>
+                <a href="nosotros.html">Nosotros</a>
+                <a href="menu.html">Menú</a>
+                <a href="inventario.html" class="activo">Inventario</a>
+                <a href="#" id="btnCerrarSesion" class="login-btn"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="titulo-seccion">
+            <h2>Inventario General de Bienes</h2>
+            <p><i class="fa-solid fa-boxes-stacked" style="color: var(--green-ghibli);"></i> Registro oficial de equipos, mobiliario y recursos institucionales UNOVA.</p>
+        </div>
+
+        <div class="tabla-contenedor">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Código</th>
+                        <th>Artículo</th>
+                        <th>Categoría</th>
+                        <th>Departamento</th>
+                        <th>Cantidad</th>
+                        <th>Estado</th>
+                        <th>Ubicación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>UNI-001</strong></td>
+                        <td>Computadora de escritorio</td>
+                        <td>Cómputo</td>
+                        <td>Laboratorio 1</td>
+                        <td>25</td>
+                        <td><span class="badge bueno">Bueno</span></td>
+                        <td>Edificio A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>UNI-002</strong></td>
+                        <td>Laptop Lenovo</td>
+                        <td>Cómputo</td>
+                        <td>Dirección</td>
+                        <td>5</td>
+                        <td><span class="badge bueno">Bueno</span></td>
+                        <td>Edificio B</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>UNI-003</strong></td>
+                        <td>Proyector Epson</td>
+                        <td>Audiovisual</td>
+                        <td>Sistemas</td>
+                        <td>4</td>
+                        <td><span class="badge bueno">Bueno</span></td>
+                        <td>Aula 201</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>UNI-004</strong></td>
+                        <td>Escritorio ejecutivo</td>
+                        <td>Mobiliario</td>
+                        <td>Administración</td>
+                        <td>8</td>
+                        <td><span class="badge bueno">Bueno</span></td>
+                        <td>Edificio B</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>UNI-005</strong></td>
+                        <td>Silla ergonómica</td>
+                        <td>Mobiliario</td>
+                        <td>Docencia</td>
+                        <td>30</td>
+                        <td><span class="badge regular">Regular</span></td>
+                        <td>Edificio A</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><strong>UNI-006</strong></td>
+                        <td>Impresora multifuncional</td>
+                        <td>Periféricos</td>
+                        <td>Control escolar</td>
+                        <td>3</td>
+                        <td><span class="badge bueno">Bueno</span></td>
+                        <td>Edificio C</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><strong>UNI-007</strong></td>
+                        <td>Router inalámbrico</td>
+                        <td>Redes</td>
+                        <td>Sistemas</td>
+                        <td>6</td>
+                        <td><span class="badge bueno">Bueno</span></td>
+                        <td>Centro de cómputo</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><strong>UNI-008</strong></td>
+                        <td>Pizarrón blanco</td>
+                        <td>Material didáctico</td>
+                        <td>Docencia</td>
+                        <td>12</td>
+                        <td><span class="badge bueno">Bueno</span></td>
+                        <td>Aulas</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td><strong>UNI-009</strong></td>
+                        <td>Regulador de voltaje</td>
+                        <td>Eléctrico</td>
+                        <td>Laboratorio 2</td>
+                        <td>15</td>
+                        <td><span class="badge regular">Regular</span></td>
+                        <td>Edificio A</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td><strong>UNI-010</strong></td>
+                        <td>Computadora de escritorio</td>
+                        <td>Cómputo</td>
+                        <td>Biblioteca</td>
+                        <td>10</td>
+                        <td><span class="badge reparacion">En reparación</span></td>
+                        <td>Biblioteca</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Control del menú hamburguesa móvil
+            $('#btnMenu').click(function() {
+                $('#menu').toggleClass('mostrar');
+            });
+
+            // Lógica de Cierre de Sesión
+            $('#btnCerrarSesion').click(function(e) {
+                e.preventDefault();
+                localStorage.removeItem("unova_sesion_activa");
+                window.location.href = "login.html";
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+    if (btnCerrarSesion) {
+        btnCerrarSesion.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem("unova_sesion_activa");
+            window.location.href = "login.html";
+        });
+    }
+});
+
+// Validar si hay sesión activa, si no, expulsar al login
+if (localStorage.getItem("unova_sesion_activa") !== "true") {
+    window.location.href = "login.html";
+}
+    </script>
+</body>
+</html>
